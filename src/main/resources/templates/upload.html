@@ -7,12 +7,22 @@
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             height: 100vh;
             margin: 0;
         }
+        .header {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+        .card-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
         .card {
+            margin-top: 5rem;
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
             background-color: #fff;
@@ -35,7 +45,7 @@
             padding: 0.5rem 1rem;
             font-size: 1rem;
             color: #fff;
-            background-color: #007bff;
+            background-color: coral;
             border: none;
             border-radius: 0.25rem;
             text-decoration: none;
@@ -56,18 +66,32 @@
             cursor: pointer;
             margin-right: 1rem;
         }
+        h1 {
+            margin-bottom: 0;
+        }
+        h3 {
+            margin-top: 0;
+            color: coral;
+            font-weight: lighter;
+        }
     </style>
 </head>
 <body>
-<div class="card">
-    <h2 class="card-title">Upload SVG File</h2>
-    <h5 class="card-subtitle">Select an SVG file to upload</h5>
-    <form method="post" enctype="multipart/form-data" th:action="@{/upload}">
-        <input class="file-input" type="file" name="file" accept=".svg" required />
-        <button class="card-button" type="submit">Upload</button>
-        <a href="/" class="back-button">Back</a>
-    </form>
-    <p th:text="${message}"></p>
+<div class="header">
+    <h1>СПГ обсчет</h1>
+    <h3>Документация</h3>
+</div>
+<div class="card-wrapper">
+    <div class="card">
+        <h2 class="card-title">Загрузите SVG файл</h2>
+        <h5 class="card-subtitle">Выберите SVG файл для загрузки</h5>
+        <form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+            <input class="file-input" type="file" name="file" accept=".svg" required />
+            <button class="card-button" type="submit">Загрузить</button>
+            <a href="/" class="back-button">Назад</a>
+        </form>
+        <p th:text="${message}"></p>
+    </div>
 </div>
 </body>
 </html>
