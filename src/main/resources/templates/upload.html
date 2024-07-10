@@ -2,13 +2,72 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Upload SVG File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            background-color: #fff;
+            width: 400px;
+            padding: 1.5rem;
+            text-align: start;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: black;
+        }
+        .card-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: grey;
+        }
+        .card-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .file-input {
+            margin-bottom: 1rem;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+    </style>
 </head>
 <body>
-<h1>Upload SVG File</h1>
-<form method="post" enctype="multipart/form-data" th:action="@{/upload}">
-    <input type="file" name="file" accept=".svg" required />
-    <button type="submit">Upload</button>
-</form>
-<p th:text="${message}"></p>
+<div class="card">
+    <h2 class="card-title">Upload SVG File</h2>
+    <h5 class="card-subtitle">Select an SVG file to upload</h5>
+    <form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+        <input class="file-input" type="file" name="file" accept=".svg" required />
+        <button class="card-button" type="submit">Upload</button>
+        <a href="/" class="back-button">Back</a>
+    </form>
+    <p th:text="${message}"></p>
+</div>
 </body>
 </html>
