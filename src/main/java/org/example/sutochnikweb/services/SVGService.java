@@ -1,6 +1,5 @@
 package org.example.sutochnikweb.services;
 
-import org.example.sutochnikweb.models.Action;
 import org.example.sutochnikweb.models.ActionType;
 import org.example.sutochnikweb.models.HeightRange;
 import org.springframework.stereotype.Service;
@@ -274,13 +273,7 @@ public class SVGService {
                 HeightRange range = entry.getValue();
                 stringHeightRangeHashMap.put(range.getName(), entry.getValue());
             }
-            /*for (Map.Entry<String, HeightRange> entry : stringHeightRangeHashMap.entrySet()) {
-                HeightRange range = entry.getValue();
-                System.out.println("Диапазон " + " имеет название: " + range.getName());
-                for (Action action : range.getActions()) {
-                    System.out.println(action);
-                }
-            }*/
+
             return stringHeightRangeHashMap;
         } catch (Exception e) {
             e.printStackTrace();

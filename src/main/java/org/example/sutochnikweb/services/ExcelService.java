@@ -19,7 +19,6 @@ public class ExcelService {
         Sheet sheet = workbook.createSheet("Sheet1");
         String[] fields = {"Номер п/п", "Операция", "Время начала", "Время конца", "Продолжительность", "Дополнительная информация"};
 
-        // Создание первой строки
         Row headerRow = sheet.createRow(0);
 
         // Заполнение первой строки данными из массива fields, начиная со второй ячейки
@@ -55,9 +54,7 @@ public class ExcelService {
                     row.createCell(i).setCellValue("");
                 }
             } else {
-                // Заполняем строки данными, если есть действия
-                for (int i = 0; i < actions.size(); i++) {
-                    Action action = actions.get(i);
+                for (Action action : actions) {
                     Row row = sheet.createRow(rowNum++);
 
                     Cell cell = row.createCell(0);
@@ -68,10 +65,9 @@ public class ExcelService {
                     row.createCell(3).setCellValue(action.getStart());
                     row.createCell(4).setCellValue(action.getEnd());
                     row.createCell(5).setCellValue(action.getDuration());
-                    if(action.getOtherNumInfo()!=0){
+                    if (action.getOtherNumInfo() != 0) {
                         row.createCell(6).setCellValue(action.getOtherNumInfo());
-                    }
-                    else
+                    } else
                         row.createCell(6).setCellValue(action.getOtherInfo());
 
                     nonEmptyRows++;
@@ -105,11 +101,11 @@ public class ExcelService {
         }
 
         // Закрытие workbook
-        try {
+        /*try {
             workbook.close();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         return workbook;
     }
 }
