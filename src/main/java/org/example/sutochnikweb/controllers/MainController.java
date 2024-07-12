@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.example.sutochnikweb.models.HeightRange;
 import org.example.sutochnikweb.services.ExcelService;
 import org.example.sutochnikweb.services.SVGService;
+import org.example.sutochnikweb.services.SimpleExcelService;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -28,11 +29,11 @@ import java.util.Objects;
 public class MainController {
 
     private static final String UPLOAD_DIR = "uploads/";
-
-    ExcelService excelService;
+    //Можно заменить на ExcelService, чтобы был красивый excel файл с подсчётами
+    SimpleExcelService excelService;
     SVGService svgService;
 
-    public MainController(ExcelService excelService, SVGService svgService) {
+    public MainController(SimpleExcelService excelService, SVGService svgService) {
         this.excelService = excelService;
         this.svgService = svgService;
     }
