@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload SVG File</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: start;
+            align-items: start;
+            height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            background-color: #fff;
+            width: 300px;
+            margin: 10rem 0 0 50px;
+            padding: 1rem;
+            text-align: start;
+        }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .card-subtitle {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #6c757d;
+        }
+        .card-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.25rem;
+            text-decoration: none;
+        }
+        h1 {
+            margin-bottom: 0;
+        }
+        h3 {
+            margin-top: 0;
+            color: coral;
+            font-weight: lighter;
+        }
+        h5 {
+            margin: 0;
+            color: grey;
+            font-weight: lighter;
+        }
+        h2 {
+            margin: 0.2rem 0;
+            color: black;
+        }
+        .card a {
+            color: darkgray;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 6rem;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1>Главная</h1>
+    <h3>Сервисы</h3>
+    <div class="container">
+        <div class="card">
+            <h5>Аналитический сервис</h5>
+            <h2>СПГ обсчет</h2>
+            <h5>Подтекст для описания</h5>
+            <a href="/upload">ОТКРЫТЬ</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

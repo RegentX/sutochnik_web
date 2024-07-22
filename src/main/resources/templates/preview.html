@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Excel Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .table-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .table th {
+            background-color: #f1f1f1;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.5rem 0;
+            text-align: center;
+            font-size: 1rem;
+            color: #fff;
+            background-color: red;
+            border: none;
+            border-radius: 0.25rem;
+            text-decoration: none;
+            cursor: pointer;
+            min-width: 100px;
+            margin-left: 2rem;
+        }
+        .back-button {
+            background-color: #6c757d;
+            min-width: 100px;
+            margin-right: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="table-container">
+        <table class="table" th:if="${excelPreview}">
+            <thead>
+            <tr>
+                <th th:each="header : ${excelPreview.headers}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${excelPreview.rows}">
+                <td th:each="cell : ${row}" th:text="${cell}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="buttons">
+        <a class="button back-button" th:href="@{/upload.html}">Назад</a>
+        <a class="button download-button" th:href="@{/download}">Download</a>
+    </div>
+</div>
+</body>
+</html>
