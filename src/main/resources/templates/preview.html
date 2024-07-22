@@ -42,6 +42,13 @@
             top: 0;
             z-index: 1;
         }
+        .table tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .table .highlighted {
+            background-color: #ffd1dc;
+        }
         .buttons {
             display: flex;
             justify-content: center;
@@ -77,8 +84,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="row : ${excelPreview.rows}">
-                <td th:each="cell : ${row}" th:text="${cell}"></td>
+            <tr th:each="row : ${excelPreview.rows}" onclick="highlightRow(this)">
+                <td th:each="cell : ${row}" th:text="${cell}" th:class="${cell == 'YourString' ? 'highlight' : ''}"></td>
             </tr>
             </tbody>
         </table>
@@ -88,5 +95,13 @@
         <a class="button download-button" th:href="@{/download}">Download</a>
     </div>
 </div>
+<script>
+    function highlightRow(row) {
+        let highlightedRows = document.querySelectorAll('.highlighted');
+        highlightedRows.forEach(r => r.classList.remove('highlighted'));
+
+        row.classList.add('highlighted');
+    }
+</script>
 </body>
 </html>
