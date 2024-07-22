@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Map;
 @Service
 public class ExcelService {
+    private TimeService timeService;
+
+    public ExcelService(TimeService timeService) {
+        this.timeService = timeService;
+    }
+
     public Workbook convertToExcel(Map<String, HeightRange> map){
         SVGService svgParsing = new SVGService();
         // Создание нового Excel workbook
@@ -62,9 +68,9 @@ public class ExcelService {
                     cell.setCellStyle(topAlignedStyle);
                     row.createCell(1).setCellValue(action.getOperationNumber());
                     row.createCell(2).setCellValue(action.getType().name());
-                    row.createCell(3).setCellValue(action.getStart());
-                    row.createCell(4).setCellValue(action.getEnd());
-                    row.createCell(5).setCellValue(action.getDuration());
+                    row.createCell(3).setCellValue(timeService.convertMillisToTime(action.getStart()));
+                    row.createCell(4).setCellValue(timeService.convertMillisToTime(action.getEnd()));
+                    row.createCell(5).setCellValue(timeService.convertMillisToTime(action.getDuration()));
                     if (action.getOtherNumInfo() != 0) {
                         row.createCell(6).setCellValue(action.getOtherNumInfo());
                     } else
