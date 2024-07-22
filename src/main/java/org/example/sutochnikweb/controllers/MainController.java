@@ -1,11 +1,11 @@
 package org.example.sutochnikweb.controllers;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.example.sutochnikweb.models.HeightRange;
-import org.example.sutochnikweb.services.ExcelService;
-import org.example.sutochnikweb.services.SVGService;
 import org.example.sutochnikweb.services.SimpleExcelService;
-import org.springframework.core.annotation.AliasFor;
+import org.example.sutochnikweb.services.SVGService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,20 +18,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class MainController {
 
     private static final String UPLOAD_DIR = "uploads/";
-    //Можно заменить на ExcelService, чтобы был красивый excel файл с подсчётами
-    SimpleExcelService excelService;
-    SVGService svgService;
+    private SimpleExcelService excelService;
+    private SVGService svgService;
+    private byte[] excelBytes;
 
     public MainController(SimpleExcelService excelService, SVGService svgService) {
         this.excelService = excelService;
@@ -49,10 +51,10 @@ public class MainController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<InputStreamResource> uploadFile(@RequestParam("file") MultipartFile file) {
+    public String uploadFile(@RequestParam("file") MultipartFile file, Model model) {
         if (file.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new InputStreamResource(new ByteArrayInputStream("Пожалуйста, выберите файл для загрузки".getBytes())));
+            model.addAttribute("message", "Пожалуйста, выберите файл для загрузки");
+            return "upload";
         }
 
         try {
@@ -68,21 +70,61 @@ public class MainController {
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             excelFile.write(bos);
-            byte[] excelBytes = bos.toByteArray();
+            excelBytes = bos.toByteArray();
 
-            InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(excelBytes));
+            List<String> headers = new ArrayList<>();
+            List<List<String>> rows = new ArrayList<>();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "workbook.xlsx");
+            // Extract headers and rows from the workbook
+            Sheet sheet = excelFile.getSheetAt(0);
+            Row headerRow = sheet.getRow(0);
+            headerRow.forEach(cell -> headers.add(cell.getStringCellValue()));
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(excelBytes.length)
-                    .body(resource);
+            sheet.forEach(row -> {
+                if (row.getRowNum() > 0) { // Skip the header row
+                    List<String> rowData = new ArrayList<>();
+                    row.forEach(cell -> rowData.add(cell.toString()));
+                    rows.add(rowData);
+                }
+            });
+
+            model.addAttribute("excelPreview", new ExcelPreview(headers, rows));
+            return "preview";
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new InputStreamResource(new ByteArrayInputStream("Не удалось загрузить файл".getBytes())));
+            model.addAttribute("message", "Не удалось загрузить файл");
+            return "upload";
+        }
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<InputStreamResource> downloadFile() {
+        InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(excelBytes));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "workbook.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(excelBytes.length)
+                .body(resource);
+    }
+
+    public static class ExcelPreview {
+        private List<String> headers;
+        private List<List<String>> rows;
+
+        public ExcelPreview(List<String> headers, List<List<String>> rows) {
+            this.headers = headers;
+            this.rows = rows;
+        }
+
+        public List<String> getHeaders() {
+            return headers;
+        }
+
+        public List<List<String>> getRows() {
+            return rows;
         }
     }
 }
