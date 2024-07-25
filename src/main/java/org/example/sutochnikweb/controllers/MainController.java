@@ -83,7 +83,18 @@ public class MainController {
             sheet.forEach(row -> {
                 if (row.getRowNum() > 0) { // Skip the header row
                     List<String> rowData = new ArrayList<>();
-                    row.forEach(cell -> rowData.add(cell.toString()));
+                    for (int i = 0; i < row.getLastCellNum(); i++) {
+                        if (i == 1) { // Second column
+                            // Parse as integer
+                            try {
+                                rowData.add(String.valueOf((int) row.getCell(i).getNumericCellValue()));
+                            } catch (Exception e) {
+                                rowData.add("Invalid number");
+                            }
+                        } else {
+                            rowData.add(row.getCell(i).toString());
+                        }
+                    }
                     rows.add(rowData);
                 }
             });
@@ -95,6 +106,7 @@ public class MainController {
             return "upload";
         }
     }
+
 
     @GetMapping("/download")
     public ResponseEntity<InputStreamResource> downloadFile() {
