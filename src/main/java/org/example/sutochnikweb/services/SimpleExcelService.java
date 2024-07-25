@@ -45,7 +45,7 @@ public class SimpleExcelService {
                     Cell cell = row.createCell(0);
                     cell.setCellValue(key);
                     row.createCell(1).setCellValue(action.getOperationNumber());
-                    row.createCell(2).setCellValue(action.getType().name());
+                    row.createCell(2).setCellValue(action.getType().getDescription());
                     row.createCell(3).setCellValue(timeService.convertMillisToTime(action.getStart()));
                     row.createCell(4).setCellValue(timeService.convertMillisToTime(action.getEnd()));
                     row.createCell(5).setCellValue(timeService.convertMillisToTime(action.getDuration()));
@@ -64,12 +64,6 @@ public class SimpleExcelService {
             e.printStackTrace();
         }
 
-        // Закрытие workbook
-        /*try {
-            workbook.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         return workbook;
     }
 }

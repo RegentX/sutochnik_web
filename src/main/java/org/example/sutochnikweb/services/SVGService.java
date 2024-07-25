@@ -1,7 +1,6 @@
 package org.example.sutochnikweb.services;
 
-import org.example.sutochnikweb.models.ActionType;
-import org.example.sutochnikweb.models.HeightRange;
+import org.example.sutochnikweb.models.*;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,6 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class SVGService {
@@ -38,6 +39,7 @@ public class SVGService {
                     normalElementList.add((Element) node);
                 }
             }
+            LinkedList<String> textBuffer = new LinkedList<>();
             Iterator<Element> iterator = normalElementList.iterator();
             Element previousElement = null;
             Element currentElement = null;
@@ -317,10 +319,104 @@ public class SVGService {
                         }
                     }
                 }
+                else if (currentElement.getTagName().equals("text")) {
+                    // Добавляем текстовое значение в буфер
+                    textBuffer.add(currentElement.getTextContent());
+                } else if (currentElement.getTagName().equals("path")) {
+                    String dAttribute = currentElement.getAttribute("d");
+                    String pathFill = currentElement.getAttribute("fill");
+                    if (!pathFill.equals("#FFFFFF") && dAttribute != null && !dAttribute.isEmpty()) {
+                        // Регулярные выражения для извлечения команд и координат
+                        Pattern pattern = Pattern.compile("([ML])\\s*(-?\\d+\\.\\d+|-?\\d+)\\s*(-?\\d+\\.\\d+|-?\\d+)");
+                        Matcher matcher = pattern.matcher(dAttribute);
+
+                        List<PathData> pathDataList = new ArrayList<>();
+                        PathData currentPathData = null;
+                        double prevY = Double.NaN;
+                        double prevX = Double.NaN;
+
+                        while (matcher.find()) {
+                            String command = matcher.group(1);
+                            double x = Double.parseDouble(matcher.group(2));
+                            double y = Double.parseDouble(matcher.group(3));
+
+                            if (command.equals("M")) {
+                                // Создаем новый PathData при новой начальной точке
+                                currentPathData = new PathData(new PointAccum(x, y));
+                                pathDataList.add(currentPathData);
+                            }
+
+                            if (command.equals("L") && currentPathData != null) {
+                                if (!Double.isNaN(prevY) && y != prevY) {
+                                    currentPathData.getChangePoints().add(new PointAccum(x, y));
+                                }
+                            }
+                            prevX = x;
+                            // Обновляем значение предыдущего Y для следующей итерации
+                            prevY = y;
+                        }
+
+                        // Устанавливаем конечную точку для каждого PathData
+                        if (currentPathData != null) {
+                            PointAccum endPoint = new PointAccum(prevX, prevY);
+                            currentPathData.setEndPoint(endPoint);
+                        }
+                        List<PathData> clearedPathData = new ArrayList<>();
+                        for (PathData pathData : pathDataList) {
+                            if (pathData.getStartPoint().x != pathData.getEndPoint().x) {
+                                clearedPathData.add(pathData);
+                            }
+                        }
+
+                        for (PathData pathData : clearedPathData) {
+                            List<PointAccum> changePoints = pathData.getChangePoints();
+
+                            // Пропускаем, если нет точек изменений
+                            if (changePoints.isEmpty()) {
+                                continue;
+                            }
+
+                            int changePointsCount = changePoints.size();
+                            if (textBuffer.size() >= changePointsCount) {
+                                List<String> relevantTexts = textBuffer.subList(textBuffer.size() - changePointsCount+1, textBuffer.size());
+
+                                elementY = (int) Math.round(pathData.getStartPoint().y);
+                                for (int range : heightRanges) {
+                                    if (elementY >= range && elementY <= range + 39) {
+                                        // Проходим по всем точкам изменений и записываем их в heightRange
+                                        for (int j = 0; j < changePoints.size()-1; j++) {
+                                            double startX = changePoints.get(j).x;
+                                            double nextX = changePoints.get(j + 1).x;
+                                            String textValue = relevantTexts.get(j);
+
+                                            heightRangesMap.get(range).addAction(
+                                                    ActionType.ACCUMULATION,
+                                                    calculateTime(startX),
+                                                    calculateTime(nextX),
+                                                    calculateTimeDuration(startX, nextX),
+                                                    textValue
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Удаляем из буфера количество текстов, которые были обработаны
+                            for (int i = 0; i < changePointsCount; i++) {
+                                if (!textBuffer.isEmpty()) {
+                                    textBuffer.removeLast();
+                                }
+                            }
+                        }
+                    }
+                }
+
+
 
                 // TODO: Остальные фигуры
 
             }
+            System.out.println("ss");
             // Вывод информации о каждом диапазоне и действиях в нём
             //TODO: Костыли!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

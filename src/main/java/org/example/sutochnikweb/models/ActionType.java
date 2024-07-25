@@ -1,43 +1,51 @@
 package org.example.sutochnikweb.models;
 
-// Перечисление для типов операций
 public enum ActionType {
-    TRAIN_ARRIVAL, // прием поезда, готово
-    PASSENGER_TRAIN_ARRIVAL, // прием пассажирского поезда, готово
-    PASSENGER_TRAIN_DEPARTURE, // отправление пассажирского поезда, готово
-    TRAIN_DEPARTURE, // отправление поезда, готово
-    SHUNTING, // перестановка, готово
-    LOCOMOTIVE_CLEANING, // уборка поездного локомотива, готово
-    LOCOMOTIVE_PROVISION, // подача поездного локомотива, готово
-    ADVANCEMENT, // надвиг, готово
-    LOCOMOTIVE_MOVEMENT_RESERVE, // движение локомотива резервом, готово
-    SIDETRACK_CLEANING, // уборка с подъездного пути, готово
-    SIDETRACK_PROVISION, // подача на подъездной путь, готово
-    TRAIN_INSPECTION_STOP, // осмотр состава/стоянка, готово
-    FORMATION_COMPLETION, // окончание формирования, готово
-    BRAKE_TESTING, // опробование тормозов, готово
-    TRAIN_SECURING, // закрепление состава, готово
-    PASSENGER_TRAIN_STOP, // стоянка пассажирского поезда
-    FRONT_ALIGNMENT, // расстановка по фронтам
-    UNLOADING, // выгрузка, готово
-    LOADING, // погрузка, готово
-    CAR_DETACHMENT, // отцепка вагонов, готово
-    TRAIN_LOCOMOTIVE_DETACHMENT, // отцепка поездного локомотива, готово
-    SHUNTING_LOCOMOTIVE_DETACHMENT, // отцепка маневрового локомотива, готово
-    SHUNTING_LOCOMOTIVE_ATTACHMENT, // прицепка маневрового локомотива, готово
-    TRAIN_LOCOMOTIVE_ATTACHMENT, // прицепка поездного локомотива, готово
-    TRAIN_PRESENTATION, // предъявление состава
-    TRAIN_HANDOVER, // отдача состава
-    IDLE_TIME, // простой
-    MOVEMENT_WAIT, // ожидание движения
-    SLOT_WAIT, // ожидание нитки
-    CREW_WAIT, // ожидание бригады
-    TRAIN_LOCOMOTIVE_ENTRY, // заезд поездного локомотива
-    TRAIN_DISSOLUTION, // роспуск состава
-    SHUNTING_LOCOMOTIVE_RECOUPLING, // перецепка маневрового локомотива
-    HUMP_LOCOMOTIVE_ATTACHMENT_FOR_ADVANCEMENT, // прицепка горочного локомотива для надвига
-    CAR_PUSHBACK, // осаживание вагонов
-    DISSOLUTION_PERMISSION_WAIT, // ожидание разрешения на роспуск
+    TRAIN_ARRIVAL("Прием поезда"),
+    PASSENGER_TRAIN_ARRIVAL("Прием пассажирского поезда"),
+    PASSENGER_TRAIN_DEPARTURE("Отправление пассажирского поезда"),
+    TRAIN_DEPARTURE("Отправление поезда"),
+    SHUNTING("Перестановка"),
+    LOCOMOTIVE_CLEANING("Уборка поездного локомотива"),
+    LOCOMOTIVE_PROVISION("Подача поездного локомотива"),
+    ADVANCEMENT("Надвиг"),
+    LOCOMOTIVE_MOVEMENT_RESERVE("Движение локомотива резервом"),
+    SIDETRACK_CLEANING("Уборка с подъездного пути"),
+    SIDETRACK_PROVISION("Подача на подъездной путь"),
+    TRAIN_INSPECTION_STOP("Осмотр состава/стоянка"),
+    FORMATION_COMPLETION("Окончание формирования"),
+    BRAKE_TESTING("Опробование тормозов"),
+    TRAIN_SECURING("Закрепление состава"),
+    PASSENGER_TRAIN_STOP("Стоянка пассажирского поезда"),
+    FRONT_ALIGNMENT("Расстановка по фронтам"),
+    UNLOADING("Выгрузка"),
+    LOADING("Погрузка"),
+    CAR_DETACHMENT("Отцепка вагонов"),
+    TRAIN_LOCOMOTIVE_DETACHMENT("Отцепка поездного локомотива"),
+    SHUNTING_LOCOMOTIVE_DETACHMENT("Отцепка маневрового локомотива"),
+    SHUNTING_LOCOMOTIVE_ATTACHMENT("Прицепка маневрового локомотива"),
+    TRAIN_LOCOMOTIVE_ATTACHMENT("Прицепка поездного локомотива"),
+    TRAIN_PRESENTATION("Предъявление состава"),
+    TRAIN_HANDOVER("Отдача состава"),
+    IDLE_TIME("Простой"),
+    MOVEMENT_WAIT("Ожидание движения"),
+    SLOT_WAIT("Ожидание нитки"),
+    CREW_WAIT("Ожидание бригады"),
+    TRAIN_LOCOMOTIVE_ENTRY("Заезд поездного локомотива"),
+    TRAIN_DISSOLUTION("Роспуск состава"),
+    SHUNTING_LOCOMOTIVE_RECOUPLING("Перецепка маневрового локомотива"),
+    HUMP_LOCOMOTIVE_ATTACHMENT_FOR_ADVANCEMENT("Прицепка горочного локомотива для надвига"),
+    CAR_PUSHBACK("Осаживание вагонов"),
+    DISSOLUTION_PERMISSION_WAIT("Ожидание разрешения на роспуск"),
+    ACCUMULATION("Накопление");
 
-    ACCUMULATION
+    private final String description;
+
+    ActionType(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
