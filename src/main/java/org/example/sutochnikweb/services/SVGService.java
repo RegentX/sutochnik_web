@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class SVGService {
-    public Map<String, HeightRange> parseSvg(File svgFile) {
+    public LinkedHashMap<String, HeightRange> parseSvg(File svgFile) {
         try {
             // Указание полного пути к файлу SVG, если не фуричит значит что-то с кодировкой в проекте
             // Создание фабрики и билдера для парсинга XML
@@ -53,7 +53,7 @@ public class SVGService {
                 heightRanges[i] = rangeStart + (i * 40);
             }
 
-            Map<Integer, HeightRange> heightRangesMap = new HashMap<>();
+            Map<Integer, HeightRange> heightRangesMap = new LinkedHashMap<>();
             int numOfOperationInLine = 0;
             double elementStartX = 0.0;
             double elementEndX = 0.0;
@@ -416,7 +416,7 @@ public class SVGService {
                 // TODO: Остальные фигуры
 
             }
-            System.out.println("ss");
+
             // Вывод информации о каждом диапазоне и действиях в нём
             //TODO: Костыли!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -427,7 +427,7 @@ public class SVGService {
                 value.numberActionsByStart();
             }
 
-            Map<String, HeightRange> stringHeightRangeHashMap = new LinkedHashMap<>();
+            LinkedHashMap<String, HeightRange> stringHeightRangeHashMap = new LinkedHashMap<>();
             for (Map.Entry<Integer, HeightRange> entry : heightRangesMap.entrySet()) {
                 HeightRange range = entry.getValue();
                 stringHeightRangeHashMap.put(range.getName(), entry.getValue());
