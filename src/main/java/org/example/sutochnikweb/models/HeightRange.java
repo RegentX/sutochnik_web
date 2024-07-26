@@ -46,4 +46,10 @@ public class HeightRange {
             actions.get(i).setOperationNumber(i + 1);
         }
     }
+
+    public void adjustTimes(int startTime) {
+        for (Action action : actions) {
+            action.adjustTimes(startTime);
+        }
+    }
 }

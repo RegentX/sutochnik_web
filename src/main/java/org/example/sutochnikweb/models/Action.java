@@ -3,8 +3,8 @@ package org.example.sutochnikweb.models;
 // Класс действия (операции)
 public class Action {
     private final ActionType type;
-    private final int start;
-    private final int end;
+    private int start;
+    private int end;
     private final int duration;
     private int operationNumber;
     private final int otherNumInfo;
@@ -61,6 +61,12 @@ public class Action {
 
     public void setOperationNumber(int operationNumber) {
         this.operationNumber = operationNumber;
+    }
+
+    public void adjustTimes(int startTimeInMillis) {
+        int millisecondsInDay = 86400000; // количество миллисекунд в дне
+        this.start = (this.start + startTimeInMillis) % millisecondsInDay;
+        this.end = (this.end + startTimeInMillis) % millisecondsInDay;
     }
 
     @Override
