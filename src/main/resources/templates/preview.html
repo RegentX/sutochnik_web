@@ -8,7 +8,7 @@
             background-color: #f8f9fa;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: start;
             height: 100vh;
             margin: 0;
         }
@@ -16,10 +16,12 @@
             width: 95%;
             max-width: 1200px;
             background-color: #fff;
-            border: 1px solid #dee2e6;
+            border: 5px solid #dee2e6;
             border-radius: 0.25rem;
             padding: 1.5rem;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
         }
         .table-container {
             max-height: 60vh;
@@ -76,6 +78,20 @@
 </head>
 <body>
 <div class="container">
+    <div class="table-container">
+        <table class="table" th:if="${excelPreview}">
+            <thead>
+            <tr>
+                <th th:each="header : ${excelPreview.analyticHeaders}" th:text="${header}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${excelPreview.analyticRows}" onclick="highlightRow(this)">
+                <td th:each="cell : ${row}" th:text="${cell}" th:class="${cell == 'YourString' ? 'highlight' : ''}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="table-container">
         <table class="table" th:if="${excelPreview}">
             <thead>
